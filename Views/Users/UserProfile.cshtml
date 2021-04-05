@@ -1,0 +1,73 @@
+﻿@using System.Security.Claims;
+@model ProfileViewModel
+
+@if (TempData.Peek("UserError") != null)
+{
+    <h3 style="color: red">@TempData["UserError"]</h3>
+}
+
+@if (Model.UserName != null)
+{
+    <p>Name: @Model.UserName</p>
+
+}
+@if (Model.Email != null)
+{
+    <p>Email: @Model.Email</p>
+
+}
+@if (Model.PhoneNumber != null)
+{
+    <p>Phone: @Model.PhoneNumber</p>
+
+}
+@if (Model.Location != null)
+{
+    <p>Location: @Model.Location</p>
+
+}
+@if (Model.Biography != null)
+{
+    <p>Bio: @Model.Biography</p>
+
+}
+@if (Model.GitHub != null)
+{
+    <p>
+        GitHub: <a href="https://www.github.com/@Model.GitHub">@Model.GitHub</a>
+        <br />
+    </p>
+}
+@if (Model.LinkedIn != null)
+{
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/@Model.LinkedIn">@Model.LinkedIn</a></p>
+}
+<br />
+    <p>Skills: </p>
+    @foreach (Skill s in Model.skills)
+    {
+        <ul>
+            <li>@s.Skill1</li>
+        </ul>
+    }
+
+
+
+@if (Model.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+{
+    <br />
+    <a href="/Users/EditUserProfile">Edit Profile</a>
+    <br />
+}
+else
+{
+    <br />
+    <a asp-action="Chat" asp-controller="Chat" asp-route-receiverId="@Model.UserId">Send Message</a>
+    <br />
+}
+
+@if (User.HasClaim("Account", "Employer") && Model.UserId != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+{
+    <a asp-controller="SavedUsers" asp-action="SaveUser" asp-route-userId="@Model.UserId">Save user</a>
+}
+
